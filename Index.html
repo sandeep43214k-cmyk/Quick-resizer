@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Resizer - Professional Photo & Signature Tool</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.95);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-200">
+
+    <nav class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 text-white p-2.5 rounded-xl shadow-lg shadow-blue-500/30 flex items-center justify-center">
+                    <i class="fa-solid font-bold fa-expand text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
+                        Quick Resizer
+                    </h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Photo & Signature HD Tool</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button id="themeToggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors" title="Toggle Theme">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:block"></i>
+                </button>
+                <div class="text-xs font-semibold px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hidden sm:inline-block">
+                    <i class="fa-solid fa-shield-halved mr-1"></i> 100% Secure & Local Processing
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Quick Presets Banner -->
+        <div class="mb-8 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                <h2 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                    <i class="fa-solid fa-bolt text-amber-500"></i> Fast Presets for Sarkari & Online Forms
+                </h2>
+                <span class="text-xs text-slate-400">Click to auto-apply dimensions & target KB</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
+                <button onclick="applyPreset('passport')" class="p-2.5 text-left rounded-xl border border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 bg-slate-50 dark:bg-slate-900 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition text-xs group">
+                    <div class="font-semibold text-slate-700 dark:text-slate-200 group-hover:text-blue-600">Passport Photo</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">350 x 450 px • 50 KB</div>
+                </button>
+
+                <button onclick="applyPreset('signature')" class="p-2.5 text-left rounded-xl border border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 bg-slate-50 dark:bg-slate-900 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition text-xs group">
+                    <div class="font-semibold text-slate-700 dark:text-slate-200 group-hover:text-blue-600">Signature</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">300 x 80 px • 20 KB</div>
+                </button>
+
+                <button onclick="applyPreset('ssc')" class="p-2.5 text-left rounded-xl border border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 bg-slate-50 dark:bg-slate-900 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition text-xs group">
+                    <div class="font-semibold text-slate-700 dark:text-slate-200 group-hover:text-blue-600">SSC Exam</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">350 x 450 px • 20-50KB</div>
+                </button>
+
+                <button onclick="applyPreset('upssc')" class="p-2.5 text-left rounded-xl border border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 bg-slate-50 dark:bg-slate-900 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition text-xs group">
+                    <div class="font-semibold text-slate-700 dark:text-slate-200 group-hover:text-blue-600">UPSSSC / VDO</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">350 x 450 px • 50 KB</div>
+                </button>
+
+                <button onclick="applyPreset('railway')" class="p-2.5 text-left rounded-xl border border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 bg-slate-50 dark:bg-slate-900 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition text-xs group">
+                    <div class="font-semibold text-slate-700 dark:text-slate-200 group-hover:text-blue-600">RRB / Railway</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">320 x 240 px • 70 KB</div>
+                </button>
+
+                <button onclick="applyPreset('bank')" class="p-2.5 text-left rounded-xl border border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 bg-slate-50 dark:bg-slate-900 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition text-xs group">
+                    <div class="font-semibold text-slate-700 dark:text-slate-200 group-hover:text-blue-600">IBPS Bank Exam</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">200 x 230 px • 50 KB</div>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Side: Input & Settings (5 Cols) -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- File Selection Box -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+                    <h2 class="text-base font-bold mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-file-image text-blue-600 dark:text-blue-400"></i> Select Image Source
+                    </h2>
+
+                    <!-- Explicit Upload Picture Button & Drop Zone (Clean label as requested: Upload the picture) -->
+                    <div id="dropZone" class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-6 text-center hover:border-blue-500 dark:hover:border-blue-400 transition bg-slate-50/50 dark:bg-slate-900/50 group cursor-pointer mb-4">
+                        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/jpg" class="hidden">
+                        
+                        <div class="w-14 h-14 bg-blue-100 dark:bg-blue-950/60 rounded-full flex items-center justify-center mx-auto mb-3 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+                        </div>
+                        
+                        <!-- Primary Label explicitly saying "Upload the picture" without question marks -->
+                        <p class="font-semibold text-slate-800 dark:text-slate-200 text-base mb-1">
+                            Upload the picture
+                        </p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">
+                            Click here or drag and drop your photo or signature
+                        </p>
+
+                        <!-- Clean upload button badge -->
+                        <label for="fileInput" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-xl shadow-md transition cursor-pointer">
+                            <i class="fa-solid fa-folder-open"></i> Upload the picture
+                        </label>
+                    </div>
+
+                    <div class="relative flex py-1 items-center mb-4">
+                        <div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+                        <span class="flex-shrink mx-4 text-xs text-slate-400 font-semibold uppercase">Or Capture Live</span>
+                        <div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+                    </div>
+
+                    <!-- Camera Button -->
+                    <button id="openCameraBtn" class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium text-sm transition shadow-sm">
+                        <i class="fa-solid fa-camera"></i> Take Photo with Camera
+                    </button>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-3">
+                        <h2 class="text-base font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-indigo-500"></i> Resize & Resolution Settings
+                        </h2>
+                        <button id="resetBtn" class="text-xs text-slate-500 hover:text-red-500 transition flex items-center gap-1">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+
+                    <!-- Dimension Inputs -->
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide">Dimensions (Pixels)</label>
+                            <label class="inline-flex items-center cursor-pointer text-xs text-slate-500">
+                                <input type="checkbox" id="aspectRatioLock" checked class="sr-only peer">
+                                <div class="w-8 h-4 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all dark:border-slate-600 peer-checked:bg-blue-600 relative"></div>
+                                <span class="ml-2 font-medium"><i class="fa-solid fa-link text-xs mr-1"></i> Lock Aspect Ratio</span>
+                            </label>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <span class="text-[11px] text-slate-400 font-medium mb-1 block">Width (PX)</span>
+                                <div class="relative">
+                                    <input type="number" id="widthInput" placeholder="e.g. 350" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <span class="absolute right-3 top-2.5 text-xs text-slate-400">px</span>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-[11px] text-slate-400 font-medium mb-1 block">Height (PX)</span>
+                                <div class="relative">
+                                    <input type="number" id="heightInput" placeholder="e.g. 450" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <span class="absolute right-3 top-2.5 text-xs text-slate-400">px</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Target File Size KB Control -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide">Target File Size Limit (KB)</label>
+                            <span class="text-xs text-blue-600 dark:text-blue-400 font-medium">Compress HD</span>
+                        </div>
+                        <div class="relative">
+                            <input type="number" id="kbInput" placeholder="e.g. 50 (Leave blank for max quality)" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <span class="absolute right-3 top-2.5 text-xs text-slate-400">KB Max</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1">Smart compression algorithm scales quality automatically to fit below this limit.</p>
+                    </div>
+
+                    <!-- DPI Changer Preset -->
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide mb-1.5 block">DPI Resolution</label>
+                        <select id="dpiInput" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="96">96 DPI (Web & Standard)</option>
+                            <option value="200">200 DPI (Sarkari Job Forms Standard)</option>
+                            <option value="300" selected>300 DPI (HD Print & High Clarity)</option>
+                            <option value="600">600 DPI (Ultra High Res Document)</option>
+                        </select>
+                    </div>
+
+                    <!-- Format Notice -->
+                    <div class="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-xl text-xs text-amber-800 dark:text-amber-300 flex items-center gap-2">
+                        <i class="fa-solid fa-file-jpg text-base"></i>
+                        <span>Export Output is permanently formatted in <strong>High Quality JPEG (.jpg)</strong> as required by online forms.</span>
+                    </div>
+
+                    <!-- Download Trigger Button -->
+                    <button id="downloadBtn" disabled class="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 dark:disabled:bg-slate-800 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2 text-base">
+                        <i class="fa-solid fa-download"></i> Resize & Download JPG
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Side: Preview & Output Details (7 Cols) -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- Live Preview Card -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 min-h-[480px] flex flex-col justify-between">
+                    
+                    <div>
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700">
+                            <h2 class="text-base font-bold flex items-center gap-2">
+                                <i class="fa-solid fa-eye text-emerald-500"></i> Live HD Image Preview
+                            </h2>
+                            <div id="statusBadge" class="hidden px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                                Ready for Resize
+                            </div>
+                        </div>
+
+                        <!-- Camera View Overlay -->
+                        <div id="cameraContainer" class="hidden relative rounded-2xl overflow-hidden bg-black aspect-video mb-4">
+                            <video id="video" autoplay playsinline class="w-full h-full object-cover"></video>
+                            <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-3 px-4">
+                                <button id="captureBtn" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-lg transition flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-dot"></i> Capture Photo
+                                </button>
+                                <button id="closeCameraBtn" class="px-4 py-2.5 bg-slate-800/80 hover:bg-slate-900 text-white text-sm font-medium rounded-xl backdrop-blur transition">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Main Preview Container -->
+                        <div id="emptyState" class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-12 text-center my-6 flex flex-col items-center justify-center min-h-[300px]">
+                            <div class="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-400 mb-4">
+                                <i class="fa-solid fa-image text-3xl"></i>
+                            </div>
+                            <p class="font-semibold text-slate-600 dark:text-slate-300 mb-1">No Image Loaded Yet</p>
+                            <p class="text-xs text-slate-400 max-w-xs">Use the "Upload the picture" button or camera to upload your photo or signature.</p>
+                        </div>
+
+                        <div id="previewWrapper" class="hidden relative rounded-2xl overflow-hidden bg-slate-900/5 dark:bg-slate-950/40 p-4 border border-slate-200 dark:border-slate-800 flex items-center justify-center min-h-[300px] max-h-[420px]">
+                            <img id="previewImage" class="max-h-[380px] max-w-full object-contain rounded-lg shadow-md" alt="Resizer Preview">
+                        </div>
+                    </div>
+
+                    <!-- Image Info Toolbar -->
+                    <div id="imageMeta" class="hidden mt-6 pt-4 border-t border-slate-100 dark:border-slate-700 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Original Width</span>
+                            <span id="metaOrigWidth" class="text-sm font-extrabold text-slate-700 dark:text-slate-200">-</span>
+                        </div>
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Original Height</span>
+                            <span id="metaOrigHeight" class="text-sm font-extrabold text-slate-700 dark:text-slate-200">-</span>
+                        </div>
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Original Size</span>
+                            <span id="metaOrigKB" class="text-sm font-extrabold text-slate-700 dark:text-slate-200">-</span>
+                        </div>
+                        <div class="p-2.5 bg-blue-50 dark:bg-blue-950/50 rounded-xl border border-blue-100 dark:border-blue-900">
+                            <span class="text-[10px] text-blue-500 font-bold uppercase block">Output Est. Size</span>
+                            <span id="metaOutputKB" class="text-sm font-extrabold text-blue-600 dark:text-blue-400">Calculated on save</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hidden Offscreen Processing Canvas -->
+    <canvas id="canvas" class="hidden"></canvas>
+
+    <!-- Toast Notification Box -->
+    <div id="toast" class="fixed bottom-5 right-5 transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 px-5 py-3.5 bg-slate-900 text-white dark:bg-white dark:text-slate-900 rounded-xl shadow-2xl text-sm font-medium">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600 text-lg"></i>
+        <span id="toastMsg">Action completed</span>
+    </div>
+
+    <script>
+        // DOM Element Cache
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+        const openCameraBtn = document.getElementById('openCameraBtn');
+        const closeCameraBtn = document.getElementById('closeCameraBtn');
+        const captureBtn = document.getElementById('captureBtn');
+        const video = document.getElementById('video');
+        const cameraContainer = document.getElementById('cameraContainer');
+        const previewImage = document.getElementById('previewImage');
+        const previewWrapper = document.getElementById('previewWrapper');
+        const emptyState = document.getElementById('emptyState');
+        const imageMeta = document.getElementById('imageMeta');
+        
+        const widthInput = document.getElementById('widthInput');
+        const heightInput = document.getElementById('heightInput');
+        const kbInput = document.getElementById('kbInput');
+        const dpiInput = document.getElementById('dpiInput');
+        const aspectRatioLock = document.getElementById('aspectRatioLock');
+        
+        const metaOrigWidth = document.getElementById('metaOrigWidth');
+        const metaOrigHeight = document.getElementById('metaOrigHeight');
+        const metaOrigKB = document.getElementById('metaOrigKB');
+        const metaOutputKB = document.getElementById('metaOutputKB');
+        
+        const downloadBtn = document.getElementById('downloadBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const statusBadge = document.getElementById('statusBadge');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // State Variables
+        let loadedImage = new Image();
+        let originalWidth = 0;
+        let originalHeight = 0;
+        let originalKB = 0;
+        let cameraStream = null;
+        let aspectRatio = 1;
+
+        // Theme Toggle Handler
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // Show Toast Notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.innerText = message;
+            if (type === 'error') {
+                toastIcon.className = 'fa-solid fa-circle-xmark text-red-400 text-lg';
+            } else {
+                toastIcon.className = 'fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600 text-lg';
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Drag & Drop Functionality for file selection
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-blue-500', 'bg-blue-50/50');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('border-blue-500', 'bg-blue-50/50');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-blue-500', 'bg-blue-50/50');
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                handleFileSelect(e.dataTransfer.files[0]);
+            }
+        });
+
+        // File Input Select
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+
+        function handleFileSelect(file) {
+            if (!file.type.match('image.*')) {
+                showToast('Please select a valid image file (JPG, PNG, WEBP)', 'error');
+                return;
+            }
+
+            originalKB = (file.size / 1024).toFixed(1);
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                processImageData(event.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Process Image Load
+        function processImageData(src) {
+            loadedImage = new Image();
+            loadedImage.onload = () => {
+                originalWidth = loadedImage.width;
+                originalHeight = loadedImage.height;
+                aspectRatio = originalWidth / originalHeight;
+
+                // Populate Inputs
+                widthInput.value = originalWidth;
+                heightInput.value = originalHeight;
+
+                // Meta Displays
+                metaOrigWidth.innerText = originalWidth + ' px';
+                metaOrigHeight.innerText = originalHeight + ' px';
+                metaOrigKB.innerText = originalKB + ' KB';
+                metaOutputKB.innerText = 'Calculating...';
+
+                // Display Preview
+                previewImage.src = src;
+                emptyState.classList.add('hidden');
+                previewWrapper.classList.remove('hidden');
+                imageMeta.classList.remove('hidden');
+                statusBadge.classList.remove('hidden');
+
+                // Enable Controls
+                downloadBtn.disabled = false;
+
+                showToast('Picture uploaded successfully!');
+                estimateOutputSize();
+            };
+            loadedImage.src = src;
+        }
+
+        // Aspect Ratio Maintenance logic
+        widthInput.addEventListener('input', () => {
+            if (aspectRatioLock.checked && widthInput.value) {
+                heightInput.value = Math.round(widthInput.value / aspectRatio);
+            }
+            estimateOutputSize();
+        });
+
+        heightInput.addEventListener('input', () => {
+            if (aspectRatioLock.checked && heightInput.value) {
+                widthInput.value = Math.round(heightInput.value * aspectRatio);
+            }
+            estimateOutputSize();
+        });
+
+        kbInput.addEventListener('input', estimateOutputSize);
+
+        // Camera Permission and Stream
+        openCameraBtn.addEventListener('click', async () => {
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+                });
+                video.srcObject = cameraStream;
+                cameraContainer.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+                previewWrapper.classList.add('hidden');
+                showToast('Camera active. Position photo & click capture');
+            } catch (err) {
+                showToast('Camera access denied or unavailable: ' + err.message, 'error');
+            }
+        });
+
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            cameraContainer.classList.add('hidden');
+        }
+
+        closeCameraBtn.addEventListener('click', () => {
+            stopCamera();
+            if (!loadedImage.src) {
+                emptyState.classList.remove('hidden');
+            } else {
+                previewWrapper.classList.remove('hidden');
+            }
+        });
+
+        captureBtn.addEventListener('click', () => {
+            if (!video.videoWidth) return;
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0);
+            
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+            originalKB = ((dataUrl.length * 3 / 4) / 1024).toFixed(1);
+            stopCamera();
+            processImageData(dataUrl);
+            showToast('Snapshot captured from camera!');
+        });
+
+        // Presets Functionality
+        function applyPreset(type) {
+            if (!loadedImage.src) {
+                showToast('Please upload a picture first to apply presets!', 'error');
+            }
+            
+            switch (type) {
+                case 'passport':
+                    widthInput.value = 350;
+                    heightInput.value = 450;
+                    kbInput.value = 50;
+                    dpiInput.value = "300";
+                    aspectRatioLock.checked = false;
+                    break;
+                case 'signature':
+                    widthInput.value = 300;
+                    heightInput.value = 80;
+                    kbInput.value = 20;
+                    dpiInput.value = "200";
+                    aspectRatioLock.checked = false;
+                    break;
+                case 'ssc':
+                    widthInput.value = 350;
+                    heightInput.value = 450;
+                    kbInput.value = 50;
+                    dpiInput.value = "200";
+                    aspectRatioLock.checked = false;
+                    break;
+                case 'upssc':
+                    widthInput.value = 350;
+                    heightInput.value = 450;
+                    kbInput.value = 50;
+                    dpiInput.value = "300";
+                    aspectRatioLock.checked = false;
+                    break;
+                case 'railway':
+                    widthInput.value = 320;
+                    heightInput.value = 240;
+                    kbInput.value = 70;
+                    dpiInput.value = "200";
+                    aspectRatioLock.checked = false;
+                    break;
+                case 'bank':
+                    widthInput.value = 200;
+                    heightInput.value = 230;
+                    kbInput.value = 50;
+                    dpiInput.value = "200";
+                    aspectRatioLock.checked = false;
+                    break;
+            }
+            
+            showToast(`Applied ${type.toUpperCase()} Preset Specs`);
+            estimateOutputSize();
+        }
+
+        // Reset Settings Button
+        resetBtn.addEventListener('click', () => {
+            if (loadedImage.src) {
+                widthInput.value = originalWidth;
+                heightInput.value = originalHeight;
+                kbInput.value = '';
+                dpiInput.value = "300";
+                aspectRatioLock.checked = true;
+                estimateOutputSize();
+                showToast('Settings reset to original image values');
+            }
+        });
+
+        // Estimate file size based on inputs
+        function estimateOutputSize() {
+            if (!loadedImage.src) return;
+
+            const w = parseInt(widthInput.value) || originalWidth;
+            const h = parseInt(heightInput.value) || originalHeight;
+            const targetKB = parseFloat(kbInput.value);
+
+            canvas.width = w;
+            canvas.height = h;
+
+            // High Quality Scaling
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(loadedImage, 0, 0, w, h);
+
+            let quality = 0.92;
+            let dataUrl = canvas.toDataURL('image/jpeg', quality);
+            let estimatedKB = (dataUrl.length * 3 / 4) / 1024;
+
+            if (targetKB && estimatedKB > targetKB) {
+                metaOutputKB.innerText = `~${targetKB.toFixed(1)} KB (Compressed)`;
+            } else {
+                metaOutputKB.innerText = `~${estimatedKB.toFixed(1)} KB`;
+            }
+        }
+
+        // Resize & Download JPG Trigger
+        downloadBtn.addEventListener('click', () => {
+            if (!loadedImage.src) return;
+
+            const targetW = parseInt(widthInput.value) || originalWidth;
+            const targetH = parseInt(heightInput.value) || originalHeight;
+            const targetMaxKB = parseFloat(kbInput.value);
+            const targetDPI = parseInt(dpiInput.value) || 300;
+
+            // Prepare Canvas
+            canvas.width = targetW;
+            canvas.height = targetH;
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+
+            // Fill white background for transparent PNGs converted to JPEG
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, targetW, targetH);
+            ctx.drawImage(loadedImage, 0, 0, targetW, targetH);
+
+            let quality = 0.95;
+            let dataUrl = canvas.toDataURL('image/jpeg', quality);
+            let currentKB = (dataUrl.length * 3 / 4) / 1024;
+
+            // Iterative binary search quality reduction to stay strictly under target max KB
+            if (targetMaxKB && currentKB > targetMaxKB) {
+                let minQuality = 0.05;
+                let maxQuality = 0.95;
+                
+                for (let i = 0; i < 10; i++) {
+                    quality = (minQuality + maxQuality) / 2;
+                    dataUrl = canvas.toDataURL('image/jpeg', quality);
+                    currentKB = (dataUrl.length * 3 / 4) / 1024;
+
+                    if (currentKB > targetMaxKB) {
+                        maxQuality = quality;
+                    } else {
+                        minQuality = quality;
+                    }
+                }
+            }
+
+            // Inject DPI into JPEG APP0 marker bytes
+            const finalDataUrl = setJpegDPI(dataUrl, targetDPI);
+
+            // Execute Download
+            const downloadLink = document.createElement('a');
+            const timestamp = new Date().toISOString().slice(0,10);
+            downloadLink.download = `QuickResizer_${targetW}x${targetH}_${targetDPI}DPI_${timestamp}.jpg`;
+            downloadLink.href = finalDataUrl;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+            showToast(`Downloaded successfully! (${currentKB.toFixed(1)} KB, ${targetDPI} DPI JPEG)`);
+        });
+
+        // Function to inject DPI metadata directly into JPEG binary header
+        function setJpegDPI(dataURL, dpi) {
+            const byteString = atob(dataURL.split(',')[1]);
+            const buffer = new Uint8Array(byteString.length);
+            for (let i = 0; i < byteString.length; i++) {
+                buffer[i] = byteString.charCodeAt(i);
+            }
+
+            // Verify JPEG header (0xFF 0xD8)
+            if (buffer[0] === 0xFF && buffer[1] === 0xD8) {
+                let offset = 2;
+                while (offset < buffer.length) {
+                    if (buffer[offset] === 0xFF && buffer[offset + 1] === 0xE0) {
+                        // JFIF APP0 Segment found
+                        // Density unit at offset + 11 (1 = dots per inch)
+                        buffer[offset + 11] = 1;
+                        // Xdensity (2 bytes)
+                        buffer[offset + 12] = (dpi >> 8) & 0xFF;
+                        buffer[offset + 13] = dpi & 0xFF;
+                        // Ydensity (2 bytes)
+                        buffer[offset + 14] = (dpi >> 8) & 0xFF;
+                        buffer[offset + 15] = dpi & 0xFF;
+                        break;
+                    }
+                    offset += 1 + buffer[offset + 2];
+                }
+            }
+
+            // Convert back to data URL string
+            let binary = '';
+            for (let i = 0; i < buffer.byteLength; i++) {
+                binary += String.fromCharCode(buffer[i]);
+            }
+            return 'data:image/jpeg;base64,' + btoa(binary);
+        }
+    </script>
+</body>
+</html>
